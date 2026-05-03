@@ -6,12 +6,8 @@ dwm-*.tar
 dwm-*.tar.gz
 
 # Local runtime/test artifacts
-hud.log
-key_bindings.bin
-color_scheme.bin
-mods/**/*.bin
-tests/*.bin
-tests/*.log
+*.bin
+*.log
 
 # Common editor/OS noise
 *~
