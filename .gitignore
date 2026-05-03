@@ -1,9 +1,18 @@
-.gitignore
-*.orig
-*.rej
-larbs.pdf
-patches
-util.o
+# Build artifacts
+*.o
 dwm
-dwm.o
-drw.o
+dwm_upstream
+dwm-*.tar
+dwm-*.tar.gz
+
+# Local runtime/test artifacts
+hud.log
+key_bindings.bin
+color_scheme.bin
+mods/**/*.bin
+tests/*.bin
+tests/*.log
+
+# Common editor/OS noise
+*~
+.DS_Store

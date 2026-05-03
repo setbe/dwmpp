@@ -5,8 +5,8 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=12" };
-static const char dmenufont[]       = "monospace:size=12";
+static const char *fonts[]          = { "monospace:size=10" };
+static const char dmenufont[]       = "monospace:size=10";
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -36,7 +36,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod4Mask
+#define MODKEY Mod1Mask
 #define MOD_ENABLE_ALWAYSCENTER 1
 #define MOD_ENABLE_ATTACH_MODES 1
 #define MOD_ENABLE_FAKEFULLSCREEN 1
@@ -47,12 +47,11 @@ static const Layout layouts[] = {
 #define MOD_ENABLE_STATUS2D 1
 #define MOD_ENABLE_TITLESTATS 1
 #define CTCMD(NAME) command_fn<NAME>()
-#define HK(MOD, KEY, NAME, ARG) { MOD, KEY, CTCMD(NAME), ARG, NAME, command_desc<NAME>() }
 #define TAGKEYS(KEY,TAG) \
-	HK(MODKEY,                       KEY,      "core:view",        {.ui = 1 << TAG}), \
-	HK(MODKEY|ControlMask,           KEY,      "core:toggle_view", {.ui = 1 << TAG}), \
-	HK(MODKEY|ShiftMask,             KEY,      "core:tag",         {.ui = 1 << TAG}), \
-	HK(MODKEY|ControlMask|ShiftMask, KEY,      "core:toggle_tag",  {.ui = 1 << TAG}),
+	{ MODKEY,                       KEY,      CTCMD("core:view"),        {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask,           KEY,      CTCMD("core:toggle_view"), {.ui = 1 << TAG} }, \
+	{ MODKEY|ShiftMask,             KEY,      CTCMD("core:tag"),         {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask|ShiftMask, KEY,      CTCMD("core:toggle_tag"),  {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -64,43 +63,32 @@ static const char *termcmd[]  = { "st", NULL };
 
 static constexpr Key default_keys[] = {
 	/* modifier                     key        function        argument */
-	HK(MODKEY,                       XK_p,      "core:spawn",           {.v = dmenucmd }),
-	HK(MODKEY|ShiftMask,             XK_Return, "core:spawn",           {.v = termcmd }),
-	HK(MODKEY,                       XK_b,      "core:toggle_bar",      {0}),
-	HK(MODKEY,                       XK_j,      "core:focus_next",      {0}),
-	HK(MODKEY,                       XK_k,      "core:focus_prev",      {0}),
-	HK(MODKEY,                       XK_i,      "pertag:inc_nmaster",   {.i = +1 }),
-	HK(MODKEY,                       XK_d,      "pertag:inc_nmaster",   {.i = -1 }),
-	HK(MODKEY,                       XK_h,      "pertag:set_mfact",     {.f = -0.05}),
-	HK(MODKEY,                       XK_l,      "pertag:set_mfact",     {.f = +0.05}),
-	HK(MODKEY|ControlMask,           XK_h,      "gaps:decrease",        {.i = 1 }),
-	HK(MODKEY|ControlMask,           XK_l,      "gaps:increase",        {.i = 1 }),
-	HK(MODKEY|ControlMask,           XK_0,      "gaps:toggle",          {0}),
-	HK(MODKEY|ControlMask|ShiftMask, XK_0,      "gaps:reset",           {0}),
-	HK(MODKEY|ShiftMask,             XK_j,      "movestack:down",       {.i = +1 }),
-	HK(MODKEY|ShiftMask,             XK_k,      "movestack:up",         {.i = -1 }),
-	HK(MODKEY,                       XK_grave,  "scratchpad:toggle",    {0}),
-	HK(MODKEY|ControlMask,           XK_a,      "attach:aside",         {0}),
-	HK(MODKEY|ControlMask,           XK_b,      "attach:bottom",        {0}),
-	HK(MODKEY,                       XK_semicolon, "attach:head",       {0}),
-	HK(MODKEY|ShiftMask,             XK_f,      "fakefullscreen:toggle", {0}),
-	HK(MODKEY,                       XK_o,      "core:toggle_hud",      {0}),
-	HK(0,                            0,         "titlestats:toggle",    {0}),
-	HK(MODKEY,                       XK_Return, "core:zoom",            {0}),
-	HK(MODKEY,                       XK_Tab,    "core:view",            {0}),
-	HK(MODKEY|ShiftMask,             XK_c,      "core:kill_client",     {0}),
-	HK(MODKEY|ControlMask,           XK_t,      "pertag:set_layout",    {.v = &layouts[0]}),
-	HK(MODKEY,                       XK_t,      "core:set_layout",      {.v = &layouts[0]}),
-	HK(MODKEY,                       XK_f,      "core:set_layout",      {.v = &layouts[1]}),
-	HK(MODKEY,                       XK_m,      "core:set_layout",      {.v = &layouts[2]}),
-	HK(MODKEY,                       XK_space,  "core:set_layout",      {0}),
-	HK(MODKEY|ShiftMask,             XK_space,  "core:toggle_floating", {0}),
-	HK(MODKEY,                       XK_0,      "core:view",            {.ui = ~0u }),
-	HK(MODKEY|ShiftMask,             XK_0,      "core:tag",             {.ui = ~0u }),
-	HK(MODKEY,                       XK_comma,  "core:focusmon_prev",   {.i = -1 }),
-	HK(MODKEY,                       XK_period, "core:focusmon_next",   {.i = +1 }),
-	HK(MODKEY|ShiftMask,             XK_comma,  "core:tagmon_prev",     {.i = -1 }),
-	HK(MODKEY|ShiftMask,             XK_period, "core:tagmon_next",     {.i = +1 }),
+	{ MODKEY,                       XK_p,      CTCMD("core:spawn"),           {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_Return, CTCMD("core:spawn"),           {.v = termcmd } },
+	{ MODKEY,                       XK_b,      CTCMD("core:toggle_bar"),      {0} },
+	{ MODKEY,                       XK_j,      CTCMD("core:focus_next"),      {0} },
+	{ MODKEY,                       XK_k,      CTCMD("core:focus_prev"),      {0} },
+	{ MODKEY,                       XK_i,      CTCMD("pertag:inc_nmaster"),   {.i = +1 } },
+	{ MODKEY,                       XK_d,      CTCMD("pertag:inc_nmaster"),   {.i = -1 } },
+	{ MODKEY,                       XK_h,      CTCMD("pertag:set_mfact"),     {.f = -0.05} },
+	{ MODKEY,                       XK_l,      CTCMD("pertag:set_mfact"),     {.f = +0.05} },
+	{ MODKEY,                       XK_o,      CTCMD("core:toggle_hud"),      {0} },
+	{ 0,                            0,         CTCMD("titlestats:toggle"),    {0} },
+	{ MODKEY,                       XK_Return, CTCMD("core:zoom"),            {0} },
+	{ MODKEY,                       XK_Tab,    CTCMD("core:view"),            {0} },
+	{ MODKEY|ShiftMask,             XK_c,      CTCMD("core:kill_client"),     {0} },
+	{ MODKEY|ControlMask,           XK_t,      CTCMD("pertag:set_layout"),    {.v = &layouts[0]} },
+	{ MODKEY,                       XK_t,      CTCMD("core:set_layout"),      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_f,      CTCMD("core:set_layout"),      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_m,      CTCMD("core:set_layout"),      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_space,  CTCMD("core:set_layout"),      {0} },
+	{ MODKEY|ShiftMask,             XK_space,  CTCMD("core:toggle_floating"), {0} },
+	{ MODKEY,                       XK_0,      CTCMD("core:view"),            {.ui = ~0u } },
+	{ MODKEY|ShiftMask,             XK_0,      CTCMD("core:tag"),             {.ui = ~0u } },
+	{ MODKEY,                       XK_comma,  CTCMD("core:focusmon_prev"),   {.i = -1 } },
+	{ MODKEY,                       XK_period, CTCMD("core:focusmon_next"),   {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,  CTCMD("core:tagmon_prev"),     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period, CTCMD("core:tagmon_next"),     {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -110,7 +98,7 @@ static constexpr Key default_keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	HK(MODKEY|ShiftMask,             XK_q,      "core:quit",            {0}),
+	{ MODKEY|ShiftMask,             XK_q,      CTCMD("core:quit"),            {0} },
 };
 
 /* button definitions */
